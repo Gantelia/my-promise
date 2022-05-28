@@ -13,6 +13,7 @@ class MyPromise {
             if (this.state === PromiseState.PENDING) {
                 this.state = PromiseState.FULFILLED;
                 this.result = value;
+                console.log(3);
             }
         };
 
@@ -31,8 +32,13 @@ class MyPromise {
     } 
 }
 
+console.log(1);
 const promise = new MyPromise((resolve, reject) => {
+    console.log(2);
+    setTimeout(() => console.log(5), 0);
     resolve('success');
 });
+console.log(4);
+
 
 console.log(promise);
