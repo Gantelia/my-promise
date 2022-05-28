@@ -5,8 +5,18 @@ class MyPromise {
         this.state = PromiseState.PENDING;
         this.result = undefined;
 
-        const resolve = (value) => {};
+        const resolve = (value) => {
+            if (this.state === PromiseState.PENDING) {
+                this.state = PromiseState.FULFILLED;
+                this.result = value;
+            }
+        };
 
-        const reject = (error) => {};
+        const reject = (error) => {
+            if (this.state === PromiseState.PENDING) {
+                this.state = PromiseState.REJECTED;
+                this.result = error;
+            }
+        };
     }
 }
