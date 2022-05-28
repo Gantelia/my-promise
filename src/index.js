@@ -1,4 +1,8 @@
-import { PromiseState } from "./const";
+const PromiseState = {
+    PENDING: 'pending',
+    REJECTED: 'rejected',
+    FULFILLED: 'fulfilled',
+}
 
 class MyPromise {
     constructor(executor) {
@@ -18,5 +22,17 @@ class MyPromise {
                 this.result = error;
             }
         };
-    }
+
+        try {
+            executor(resolve, reject);
+        } catch (error) {
+            reject(error);
+        }
+    } 
 }
+
+const promise = new MyPromise((resolve, reject) => {
+    resolve('success');
+});
+
+console.log(promise);
