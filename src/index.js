@@ -13,7 +13,7 @@ class MyPromise {
             if (this.state === PromiseState.PENDING) {
                 this.state = PromiseState.FULFILLED;
                 this.result = value;
-                console.log(3);
+                console.log(3, value);
             }
         };
 
@@ -32,13 +32,22 @@ class MyPromise {
     } 
 }
 
+console.log('FIRST PROMISE INSTANCE')
 console.log(1);
 const promise = new MyPromise((resolve, reject) => {
     console.log(2);
-    setTimeout(() => console.log(5), 0);
+    setTimeout(() => console.log('Executes after all syncronous code:', 5), 0);
     resolve('success');
+    resolve('unexecuted code');
 });
 console.log(4);
 
 
-console.log(promise);
+
+const rejectedPromise = new MyPromise((resolve, reject) => {
+    console.log('SECOND PROMISE INSTANCE')
+    setTimeout(() => reject('error'), 1000);
+})
+
+setTimeout(() => console.log('Asyncronous promise check:', rejectedPromise), 2000)
+console.log('Syncronous promise check:', rejectedPromise);
