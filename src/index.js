@@ -54,6 +54,10 @@ class MyPromise {
       onRejected(this.error);
     }
   };
+
+  catch = (onRejected) => {
+    return this.then(null, onRejected);
+  };
 }
 
 console.log('FIRST PROMISE INSTANCE');
@@ -93,5 +97,12 @@ const forthPromise = new MyPromise((resolve, reject) => {
 }).then((value) => {
   console.log(value);
 }, (error) => {
+  console.log(error);
+});
+
+const fifthPromise = new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('FIFTH PROMISE INSTANCE'), 2600);
+  setTimeout(() => reject(new Error('Something is wrong!')), 2700);
+}).catch((error) => {
   console.log(error);
 });
