@@ -88,7 +88,7 @@ const thirdPromise = new MyPromise((resolve, reject) => {
 
 
 const forthPromise = new MyPromise((resolve, reject) => {
-  setTimeout(() => console.log('FORTH PROMISE INSTANCE'), 2200);
+  setTimeout(() => console.log('FOURTH PROMISE INSTANCE'), 2200);
   setTimeout(() => reject(new Error('Oops!')), 2500);
 }).then((value) => {
   console.log(value);
