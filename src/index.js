@@ -39,11 +39,9 @@ class MyPromise {
     if (this.state === PromiseState.PENDING) {
       if (onFulfilled) {
         this.onFulfilledFn.push(onFulfilled);
-        return;
       }
       if (onRejected) {
         this.onRejectedFn.push(onRejected);
-        return;
       }
     }
 
@@ -92,6 +90,8 @@ const thirdPromise = new MyPromise((resolve, reject) => {
 const forthPromise = new MyPromise((resolve, reject) => {
   setTimeout(() => console.log('FORTH PROMISE INSTANCE'), 2200);
   setTimeout(() => reject(new Error('Oops!')), 2500);
-}).then(null, (error) => {
+}).then((value) => {
+  console.log(value);
+}, (error) => {
   console.log(error);
 });
