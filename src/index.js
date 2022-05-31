@@ -91,7 +91,7 @@ const thirdPromise = new MyPromise((resolve, reject) => {
 });
 
 
-const forthPromise = new MyPromise((resolve, reject) => {
+const fourthPromise = new MyPromise((resolve, reject) => {
   setTimeout(() => console.log('FOURTH PROMISE INSTANCE'), 2200);
   setTimeout(() => reject(new Error('Oops!')), 2500);
 }).then((value) => {
@@ -106,3 +106,12 @@ const fifthPromise = new MyPromise((resolve, reject) => {
 }).catch((error) => {
   console.log(error);
 });
+
+const sixthPromise = new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('SIXTH PROMISE INSTANCE'), 2800);
+  setTimeout(() => resolve('ok'), 2900);
+});
+
+sixthPromise.then((value) => console.log('1st:', value));
+sixthPromise.then((value) => console.log('2nd:', value));
+sixthPromise.then((value) => console.log('3rd:', value));
