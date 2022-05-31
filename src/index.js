@@ -82,8 +82,16 @@ console.log('Syncronous 2-nd promise check:', secondPromise);
 
 
 const thirdPromise = new MyPromise((resolve, reject) => {
-  console.log('THIRD PROMISE INSTANCE');
+  setTimeout(() => console.log('THIRD PROMISE INSTANCE'), 1800);
   setTimeout(() => resolve('success to then'), 2000);
 }).then((value) => {
   console.log(value);
+});
+
+
+const forthPromise = new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('FORTH PROMISE INSTANCE'), 2200);
+  setTimeout(() => reject(new Error('Oops!')), 2500);
+}).then(null, (error) => {
+  console.log(error);
 });
