@@ -15,7 +15,6 @@ class MyPromise {
       if (this.state === PromiseState.PENDING) {
         this.state = PromiseState.FULFILLED;
         this.result = value;
-        console.log(3, value);
         this.onFulfilledFn.forEach((fn) => fn(value));
       }
     };
@@ -36,23 +35,51 @@ class MyPromise {
   }
 
   then = (onFulfilled, onRejected) => {
-    if (this.state === PromiseState.PENDING) {
-      if (onFulfilled) {
-        this.onFulfilledFn.push(onFulfilled);
+    return new MyPromise((resolve, reject) => {
+      if (this.state === PromiseState.PENDING) {
+        if (onFulfilled) {
+          this.onFulfilledFn.push(() => {
+            try {
+              const newResult = onFulfilled(this.result);
+              resolve(newResult);
+            } catch (error) {
+              reject(error);
+            }
+          });
+        }
+        if (onRejected) {
+          this.onRejectedFn.push(() => {
+            try {
+              const newResult = onRejected(this.result);
+              reject(newResult);
+            } catch (error) {
+              reject(error);
+            }
+          });
+        }
+        return;
       }
-      if (onRejected) {
-        this.onRejectedFn.push(onRejected);
+
+      if (onFulfilled && this.state === PromiseState.FULFILLED) {
+        try {
+          const newResult = onFulfilled(this.result);
+          resolve(newResult);
+        } catch (error) {
+          reject(error);
+        }
+        return;
       }
-    }
 
-    if (onFulfilled && this.state === PromiseState.FULFILLED) {
-      onFulfilled(this.result);
-      return;
-    }
-
-    if (onRejected && this.state === PromiseState.REJECTED) {
-      onRejected(this.error);
-    }
+      if (onRejected && this.state === PromiseState.REJECTED) {
+        try {
+          const newResult = onRejected(this.result);
+          reject(newResult);
+        } catch (error) {
+          reject(error);
+        }
+        return;
+      }
+    });
   };
 
   catch = (onRejected) => {
@@ -64,11 +91,11 @@ console.log('FIRST PROMISE INSTANCE');
 console.log(1);
 const firstPromise = new MyPromise((resolve, reject) => {
   console.log(2);
-  setTimeout(() => console.log('Executes after all syncronous code:', 5), 0);
+  setTimeout(() => console.log('Executes after all syncronous code:', 4), 0);
   resolve('success');
   resolve('unexecuted code');
 });
-console.log(4);
+console.log(3);
 
 
 const secondPromise = new MyPromise((resolve, reject) => {
@@ -115,3 +142,16 @@ const sixthPromise = new MyPromise((resolve, reject) => {
 sixthPromise.then((value) => console.log('1st:', value));
 sixthPromise.then((value) => console.log('2nd:', value));
 sixthPromise.then((value) => console.log('3rd:', value));
+
+
+const seventhPromise = new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('SEVENTH PROMISE INSTANCE'), 3000);
+  setTimeout(() => resolve('success'), 3100);
+}).then((value) => {
+  return value + ' first then';
+}).then((value) => {
+  return value + ' second then';
+}).then((value) => {
+  console.log(value);
+});
+
