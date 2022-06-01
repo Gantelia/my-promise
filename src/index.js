@@ -41,7 +41,11 @@ class MyPromise {
           this.onFulfilledFn.push(() => {
             try {
               const newResult = onFulfilled(this.result);
-              resolve(newResult);
+              if (newResult instanceof MyPromise) {
+                newResult.then(resolve, reject);
+              } else {
+                resolve(newResult);
+              }
             } catch (error) {
               reject(error);
             }
@@ -51,7 +55,11 @@ class MyPromise {
           this.onRejectedFn.push(() => {
             try {
               const newResult = onRejected(this.result);
-              reject(newResult);
+              if (newResult instanceof MyPromise) {
+                newResult.then(resolve, reject);
+              } else {
+                reject(newResult);
+              }
             } catch (error) {
               reject(error);
             }
@@ -63,7 +71,11 @@ class MyPromise {
       if (onFulfilled && this.state === PromiseState.FULFILLED) {
         try {
           const newResult = onFulfilled(this.result);
-          resolve(newResult);
+          if (newResult instanceof MyPromise) {
+            newResult.then(resolve, reject);
+          } else {
+            resolve(newResult);
+          }
         } catch (error) {
           reject(error);
         }
@@ -73,7 +85,11 @@ class MyPromise {
       if (onRejected && this.state === PromiseState.REJECTED) {
         try {
           const newResult = onRejected(this.result);
-          reject(newResult);
+          if (newResult instanceof MyPromise) {
+            newResult.then(resolve, reject);
+          } else {
+            reject(newResult);
+          }
         } catch (error) {
           reject(error);
         }
@@ -155,3 +171,14 @@ const seventhPromise = new MyPromise((resolve, reject) => {
   console.log(value);
 });
 
+
+const eighthPromise = new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('EIHGTH PROMISE INSTANCE'), 3200);
+  setTimeout(() => resolve('success'), 3300);
+}).then((value) => {
+  return new MyPromise((resolve, reject) => {
+    setTimeout(() => resolve(value + ' new promise'), 0);
+  });
+}).then((value) => {
+  console.log(value);
+});
