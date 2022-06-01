@@ -103,9 +103,9 @@ class MyPromise {
   };
 }
 
-console.log('FIRST PROMISE INSTANCE');
+console.log('FIRST PROMISE INSTANCE: sync resolve');
 console.log(1);
-const firstPromise = new MyPromise((resolve, reject) => {
+new MyPromise((resolve, reject) => {
   console.log(2);
   setTimeout(() => console.log('Executes after all syncronous code:', 4), 0);
   resolve('success');
@@ -115,7 +115,7 @@ console.log(3);
 
 
 const secondPromise = new MyPromise((resolve, reject) => {
-  console.log('SECOND PROMISE INSTANCE');
+  console.log('SECOND PROMISE INSTANCE: checking promise result');
   setTimeout(() => reject('error'), 1000);
 });
 
@@ -126,16 +126,16 @@ setTimeout(
 console.log('Syncronous 2-nd promise check:', secondPromise);
 
 
-const thirdPromise = new MyPromise((resolve, reject) => {
-  setTimeout(() => console.log('THIRD PROMISE INSTANCE'), 1800);
+new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('THIRD PROMISE INSTANCE: resolve + then'), 1800);
   setTimeout(() => resolve('success to then'), 2000);
 }).then((value) => {
   console.log(value);
 });
 
 
-const fourthPromise = new MyPromise((resolve, reject) => {
-  setTimeout(() => console.log('FOURTH PROMISE INSTANCE'), 2200);
+new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('FOURTH PROMISE INSTANCE: reject + then'), 2200);
   setTimeout(() => reject(new Error('Oops!')), 2500);
 }).then((value) => {
   console.log(value);
@@ -143,15 +143,15 @@ const fourthPromise = new MyPromise((resolve, reject) => {
   console.log(error);
 });
 
-const fifthPromise = new MyPromise((resolve, reject) => {
-  setTimeout(() => console.log('FIFTH PROMISE INSTANCE'), 2600);
+new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('FIFTH PROMISE INSTANCE: catch'), 2600);
   setTimeout(() => reject(new Error('Something is wrong!')), 2700);
 }).catch((error) => {
   console.log(error);
 });
 
 const sixthPromise = new MyPromise((resolve, reject) => {
-  setTimeout(() => console.log('SIXTH PROMISE INSTANCE'), 2800);
+  setTimeout(() => console.log('SIXTH PROMISE INSTANCE: single promise'), 2800);
   setTimeout(() => resolve('ok'), 2900);
 });
 
@@ -160,8 +160,8 @@ sixthPromise.then((value) => console.log('2nd:', value));
 sixthPromise.then((value) => console.log('3rd:', value));
 
 
-const seventhPromise = new MyPromise((resolve, reject) => {
-  setTimeout(() => console.log('SEVENTH PROMISE INSTANCE'), 3000);
+new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('SEVENTH PROMISE INSTANCE: then chain'), 3000);
   setTimeout(() => resolve('success'), 3100);
 }).then((value) => {
   return value + ' first then';
@@ -172,8 +172,8 @@ const seventhPromise = new MyPromise((resolve, reject) => {
 });
 
 
-const eighthPromise = new MyPromise((resolve, reject) => {
-  setTimeout(() => console.log('EIHGTH PROMISE INSTANCE'), 3200);
+new MyPromise((resolve, reject) => {
+  setTimeout(() => console.log('EIHGTH INSTANCE: prom inside of prom'), 3200);
   setTimeout(() => resolve('success'), 3300);
 }).then((value) => {
   return new MyPromise((resolve, reject) => {
